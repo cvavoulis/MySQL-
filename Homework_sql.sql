@@ -7,7 +7,7 @@ from actor;
 
 -- 1b. Display the first and last name of each actor in a single column in upper case letters. Name the column Actor Name.
 
-SELECT UPPER(CONCAT(first_name, ' ',last_name)) as actor_name FROM actor;
+SELECT UPPER(CONCAT(first_name, ' ',last_name)) AS actor_name FROM actor;
 
 -- 2a. You need to find the ID number, first name, and last name of an actor, of whom you know only the first name, "Joe." What is one query would you use to obtain this information?
 SELECT actor_id, first_name, last_name
@@ -29,7 +29,7 @@ ORDER BY last_name, first_name;
 
 -- 2d. Using IN, display the country_id and country columns of the following countries: Afghanistan, Bangladesh, and China:
 SELECT country_id, country
-from country
+FROM country
 WHERE country IN ("Afghanistan", "Bangladesh", "China");
 
 ALTER TABLE actor
@@ -39,7 +39,7 @@ AFTER first_name;
 -- 3b. Very quickly you realize that entering descriptions for each actor is too much effort. Delete the description column.
 
 ALTER TABLE actor
-drop column description;
+DROP column description;
 
 -- 4a. List the last names of actors, as well as how many actors have that last name.
 SELECT last_name, count(last_name) AS
@@ -52,18 +52,19 @@ SELECT last_name, count(last_name) AS
 last_name_count
 FROM actor
 GROUP BY last_name
-having last_name_count>=2;
+HAVING last_name_count>=2;
 
 -- 4c. The actor HARPO WILLIAMS was accidentally entered in the actor table as GROUCHO WILLIAMS. Write a query to fix the record.
 UPDATE actor 
-set first_name="HARPO"
-where first_name="GROUCHO";
+SET first_name="HARPO"
+WHERE first_name="GROUCHO"
+AND last_name="WILLIAMS";
 
 
 -- 4d. Perhaps we were too hasty in changing GROUCHO to HARPO. It turns out that GROUCHO was the correct name after all! In a single query, if the first name of the actor is currently HARPO, change it to GROUCHO.
 UPDATE actor 
-set first_name="GROUCHO"
-where first_name="HARPO";
+SET first_name="GROUCHO"
+WHERE first_name="HARPO";
 
 -- 5a. You cannot locate the schema of the address table. Which query would you use to re-create it?
 SHOW CREATE TABLE address;
@@ -119,7 +120,7 @@ WHERE name="English" AND title LIKE "K%" OR title LIKE "Q%";
 -- 7b. Use subqueries to display all actors who appear in the film Alone Trip.
 SELECT first_name, last_name 
 FROM actor 
-Where actor_id IN
+WHERE actor_id IN
 (SELECT actor_id FROM film_actor 
 WHERE film_id=
 (SELECT film_id FROM film WHERE title="Alone Trip"));
@@ -149,7 +150,7 @@ WHERE category.name="Family";
 SELECT title, COUNT(title) as 'Rentals'
 FROM film
 JOIN inventory
-on(film.film_id = inventory.film_id)
+ON(film.film_id = inventory.film_id)
 JOIN rental
 ON (inventory.inventory_id = rental.inventory_id)
 GROUP by title
@@ -188,7 +189,8 @@ USING (inventory_id)
 JOIN payment 
 USING (customer_id)
 GROUP BY name 
-ORDER BY totals desc; 
+ORDER BY totals desc
+FETCH FIRST 5 ROWS ONLY;; 
 
 -- 8a. In your new role as an executive, you would like to have an easy way of viewing the Top five genres by gross revenue. Use the solution from the problem above to create a view. If you haven't solved 7h, you can substitute another query to create a view.
 CREATE view top_five_genres as 
